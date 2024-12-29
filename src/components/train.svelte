@@ -5,6 +5,7 @@
     let { train } = $props();
     let localTrain = $state(train);
     let computedSpeedValue = $state(0);
+    let lastContact = $state("");
     import { enableLights, disableLights, updateSpeed } from "$lib/store";
 
     dayjs.locale("fr");
@@ -15,6 +16,8 @@
         localTrain.speed = train.speed;
         localTrain.is_going_forward = train.is_going_forward;
         localTrain.last_contact = train.last_contact;
+
+        lastContact = dayjs(localTrain.last_contact).fromNow()
 
         if (train.is_going_forward) {
             computedSpeedValue = train.speed;
@@ -76,9 +79,7 @@
             <span
                 class="badge rounded-pill bg-secondary"
                 style="font-size: 16px"
-                >Dernier contact : {dayjs(
-                    localTrain.last_contact,
-                ).fromNow()}</span
+                >Dernier contact : {lastContact}</span
             >
         </h3>
 

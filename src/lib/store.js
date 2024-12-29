@@ -2,14 +2,14 @@ import { writable } from 'svelte/store';
 import axios from 'axios';
 
 export const trains = writable([]);
-const host= 'http://localhost:8080' //TODO variabilze!
+const host = 'http://localhost:8080' //TODO variabilze!
 
 
 function getTrains() {
     axios.get(`${host}/trains`)
-    .then(res => {
-        trains.set(res.data)
-    })
+        .then(res => {
+            trains.set(res.data)
+        })
 }
 
 getTrains()
@@ -29,5 +29,5 @@ export function stop() {
 }
 
 export function updateSpeed(trainName, newSpeed, newDirection) {
-    axios.put(`${host}/trains/${trainName}/speed`, {speed: newSpeed, is_going_forward: newDirection})
+    axios.put(`${host}/trains/${trainName}/speed`, { speed: newSpeed, is_going_forward: newDirection })
 }
