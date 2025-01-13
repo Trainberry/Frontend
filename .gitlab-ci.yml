@@ -1,0 +1,23 @@
+image: registry.forestier.re/stack/ci-images/docker:latest
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - init_secrets.sh
+    - docker build -t="registry.forestier.re/uca/utils/mail-api-front:latest" .
+    - docker push registry.forestier.re/uca/utils/mail-api-front:latest
+  when: manual
+
+deploy:
+  image: registry.forestier.re/stack/ci-images/ansible:latest
+  stage: deploy
+  script:
+    - init_secrets.sh
+    - cd ansible
+    - ansible-galaxy install -r requirements.yml
+    - ansible-playbook -u florian --key-file /ansible_secrets/id_rsa -i inventories/servers playbook.yml
+  when: manual
