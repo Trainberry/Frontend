@@ -1,5 +1,0 @@
-[prod_ovh]
-51.75.243.166 # Pastrami
-
-[prod_ovh:vars]
-ansible_become_method=doas
