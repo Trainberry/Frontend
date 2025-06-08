@@ -1,38 +1,29 @@
-# sv
+# Trainberry - Frontend
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Ce dépôt contient l'interface graphique pour Trainberry.
 
-## Creating a project
+# Démarrer le serveur
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Via Docker depuis DockerHub
 
-```bash
-# create a new project in the current directory
-npx sv create
+1. Démarrez le container : `docker run -p 5173:5173 -e PUBLIC_SERVER_URL=<adresse_de_votre_serveur> --name trainberry_frontend a1hex/trainberry_frontend:<version>`
+2. L'interface est désormais disponible sur `http://localhost:5173`. 🎉
 
-# create a new project in my-app
-npx sv create my-app
-```
+## Via Docker depuis les sources (recommandé)
 
-## Developing
+1. Clonez ce dépôt ;
+2. Construisez l'image docker : `docker build -t trainberry_frontend:latest .`
+3. Démarrez le container : `docker run -p 5173:5173 -e PUBLIC_SERVER_URL=<adresse_de_votre_serveur> --name trainberry_frontend a1hex/trainberry_frontend:latest`
+4. Le serveur est désormais disponible sur `http://localhost:5173`. 🎉
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Depuis les sources
 
-```bash
-npm run dev
+Pour démarrer ce serveur depuis les sources, vous devez disposer de NodeJS sur votre machine.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+1. Installez les dépendances : `npm install`
+2. Définissez la variable `PUBLIC_SERVER_URL` (exemple : `export PUBLIC_SERVER_URL=http://localhost:8080` si le serveur Trainberry est sur la même machine).
+3. Démarrez le front : `npm run dev`
 
-## Building
+# Configuration
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Aucune configuration n'est requise, hormis la variable `PUBLIC_SERVER_URL`.

@@ -1,12 +1,12 @@
 import { writable } from 'svelte/store';
 import axios from 'axios';
+import { PUBLIC_SERVER_URL } from '$env/static/public';
 
 export const trains = writable([]);
-const host = 'http://localhost:8080' //TODO variabilze!
 
 
 function getTrains() {
-    axios.get(`${host}/trains`)
+    axios.get(`${PUBLIC_SERVER_URL}/trains`)
         .then(res => {
             trains.set(res.data)
         })
@@ -17,17 +17,17 @@ setInterval(getTrains, 5000)
 
 
 export function enableLights(trainName) {
-    axios.post(`${host}/trains/${trainName}/lights`)
+    axios.post(`${PUBLIC_SERVER_URL}/trains/${trainName}/lights`)
 }
 
 export function disableLights(trainName) {
-    axios.delete(`${host}/trains/${trainName}/lights`)
+    axios.delete(`${PUBLIC_SERVER_URL}/trains/${trainName}/lights`)
 }
 
 export function stop() {
-    axios.get(`${host}/stop`)
+    axios.get(`${PUBLIC_SERVER_URL}/stop`)
 }
 
 export function updateSpeed(trainName, newSpeed, newDirection) {
-    axios.put(`${host}/trains/${trainName}/speed`, { speed: newSpeed, is_going_forward: newDirection })
+    axios.put(`${PUBLIC_SERVER_URL}/trains/${trainName}/speed`, { speed: newSpeed, is_going_forward: newDirection })
 }
