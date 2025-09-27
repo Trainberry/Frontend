@@ -3,83 +3,29 @@
     import relativeTime from "dayjs/plugin/relativeTime";
     import "dayjs/locale/fr";
     let { train } = $props();
-    let localTrain = $state(train);
-    let computedSpeedValue = $state(0);
-    let lastContact = $state("");
-    import { enableLights, disableLights, updateSpeed } from "$lib/store";
+    import { setLight, setSpeed } from "$lib/store";
 
     dayjs.locale("fr");
     dayjs.extend(relativeTime);
-
-    $effect(() => {
-        localTrain.lights_on = train.lights_on;
-        localTrain.speed = train.speed;
-        localTrain.is_going_forward = train.is_going_forward;
-        localTrain.last_contact = train.last_contact;
-
-        lastContact = dayjs(localTrain.last_contact).fromNow()
-
-        if (train.is_going_forward) {
-            computedSpeedValue = train.speed;
-        } else {
-            computedSpeedValue = -train.speed;
-        }
-    });
-
-    function changeLights(test) {
-        localTrain.lights_on = test.target.checked;
-        if (localTrain.lights_on === true) {
-            enableLights(localTrain.name);
-        } else {
-            disableLights(localTrain.name);
-        }
-    }
-
-    function stopTrain() {
-        localTrain.speed = 0;
-        localTrain.is_going_forward = true;
-        computedSpeedValue = 0;
-        updateSpeed(
-            localTrain.name,
-            localTrain.speed,
-            localTrain.is_going_forward,
-        );
-    }
-
-    function changeSpeed(test) {
-        if (test.target.value > 0) {
-            localTrain.is_going_forward = true;
-            localTrain.speed = parseInt(test.target.value);
-        } else {
-            localTrain.is_going_forward = false;
-            localTrain.speed = -parseInt(test.target.value);
-        }
-        computedSpeedValue = test.target.value;
-        updateSpeed(
-            localTrain.name,
-            localTrain.speed,
-            localTrain.is_going_forward,
-        );
-    }
 </script>
 
 <div
     class="jumbotron"
-    style="background: #ddd; border-radius: 15px; display: flex; padding: 20px"
+    style="background: #ddd; border-radius: 15px; display: flex; padding: 20px; margin-bottom: 20px"
 >
     <div>
-        <img src="/trains/{localTrain.model.toLowerCase()}.png" />
+        <img src="/trains/{train.name.replace('Trainberry::', '').split('_')[0].toLowerCase()}.png" width="300" style="padding-right: 30px;" />
     </div>
     <div style="margin-left: 15px">
         <h3>
-            {localTrain.name}
+            {train.name.replace('Trainberry::', '')}
             <span class="badge rounded-pill bg-info" style="font-size: 16px"
-                >Modèle : {localTrain.model}</span
+                >Modèle : {train.name.replace('Trainberry::', '').split('_')[0]}</span
             >
             <span
                 class="badge rounded-pill bg-secondary"
                 style="font-size: 16px"
-                >Dernier contact : {lastContact}</span
+                >Nombre de communications en erreur : {train.error_count}</span
             >
         </h3>
 
@@ -92,10 +38,10 @@
             <input
                 class="form-check-input"
                 type="checkbox"
-                value={localTrain.lights_on}
+                value={train.light}
                 id="flexSwitchCheckChecked"
-                checked={localTrain.lights_on}
-                onchange={changeLights}
+                checked={train.light}
+                onchange={(e) => setLight(train.name, e.target.checked)}
             />
         </div>
 
@@ -113,13 +59,13 @@
                 step="10"
                 id="customRange3"
                 list="labels"
-                value={computedSpeedValue}
-                onchange={changeSpeed}
+                value={train.speed}
+                onchange={(e) => setSpeed(train.name, e.target.value)}
             />
             <button
                 class="btn btn-primary btn-sm"
                 style="margin-left: 20px;"
-                onclick={stopTrain}>Arrêter le train</button
+                onclick={() => setSpeed(train.name, 0)}>Arrêter le train</button
             >
 
             <datalist id="labels" class="test">

@@ -1,5 +1,5 @@
 <script>
-  import { stop } from "$lib/store";
+  import { emergencyStop } from "$lib/store";
 </script>
 
 <nav class="navbar navbar-expand bg-secondary fixed-top" data-bs-theme="dark">
@@ -13,7 +13,7 @@
         <a class="nav-link" href="/about">A propos</a>
       </li>
     </ul>
-    <button class="btn btn-danger my-2 my-sm-0" onclick={stop}
+    <button class="btn btn-danger my-2 my-sm-0" onclick={emergencyStop}
       >ARRÊT D'URGENCE</button
     >
   </div>
