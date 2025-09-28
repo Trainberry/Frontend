@@ -8,6 +8,11 @@ export const trains = writable([]);
 function getFullState() {
   axios.get(`${PUBLIC_SERVER_URL}/state`)
     .then(res => {
+      res.data.forEach(train => {
+        if(train.speed < 0) {
+          train.speed = - (101 + train.speed)
+        }
+      })
       trains.set(res.data)
     })
 }
@@ -68,10 +73,15 @@ socket.addEventListener("message", (event) => {
 });
 
 export function setSpeed(train, speed) {
+  let parsedSpeed = parseInt(speed)
+  if (parsedSpeed < 0) {
+    parsedSpeed = - (101 + parsedSpeed)
+  }
+
   socket.send(JSON.stringify({
     device: {
       name: train,
-      speed: parseInt(speed),
+      speed: parsedSpeed,
     },
     operation: "set_speed"
   }));
